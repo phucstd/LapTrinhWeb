@@ -10,6 +10,8 @@
 
         public int? CategoryId { get; set; }
         public Category? Category { get; set; }
+
+        public float Price { get; set; }
         public ICollection<OrderProduct>? OrderProducts { get; set; }
     }
 }
