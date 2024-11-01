@@ -18,8 +18,11 @@ namespace TheWayShop.Controllers
 
         public IActionResult Index()
         {
-            var products = _db.Products.ToList();
-            return View(products);
+            var productsId1 = _db.Products.Where(product => product.CategoryId == 1).ToList();
+            var productsId2 = _db.Products.Where(product => product.CategoryId == 2).ToList();
+            ViewData["productsId1"] = productsId1;
+            ViewData["productsId2"] = productsId2;
+            return View();
         }
 
         public IActionResult Privacy()
