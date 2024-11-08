@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using TheWayShop.AppData;
 
 namespace TheWayShop.Data;
 
-public class TheWayShopContext : IdentityDbContext<IdentityUser>
+public class TheWayShopContext : IdentityDbContext<AppUser>
 {
     public TheWayShopContext(DbContextOptions<TheWayShopContext> options)
         : base(options)

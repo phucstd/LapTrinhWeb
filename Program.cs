@@ -6,8 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("TheWayShopContextConnection") ?? throw new InvalidOperationException("Connection string 'TheWayShopContextConnection' not found.");
 
 builder.Services.AddDbContext<AppDBContext>(options => options.UseSqlServer(connectionString));
-
-//builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<TheWayShopContext>();
+builder.Services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<AppDBContext>();
 //builder.Services.AddDefaultIdentity<AppDBContext>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<TheWayShopContext>();
 
 // Add services to the container.
@@ -34,5 +33,5 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-//app.MapRazorPages();
+app.MapRazorPages();
 app.Run();

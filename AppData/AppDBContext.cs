@@ -5,7 +5,7 @@ using TheWayShop.Models;
 
 namespace TheWayShop.AppData
 {
-    public class AppDBContext : IdentityDbContext
+    public class AppDBContext : IdentityDbContext<AppUser>
     {
         public AppDBContext(DbContextOptions<AppDBContext> options)
            : base(options)
