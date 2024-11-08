@@ -4,8 +4,8 @@ namespace TheWayShop.AppData
 {
     public class AppUser : IdentityUser
     {
-        public String? FirstName { get; set; }
-        public String? LastName { get; set; }
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
 
     }
 }
