@@ -7,6 +7,7 @@ using System.Text.Encodings.Web;
 using System.Text;
 using TheWayShop.AppData;
 using TheWayShop.Models;
+using Microsoft.AspNetCore.Mvc.Routing;
 
 namespace TheWayShop.Controllers
 {
@@ -28,7 +29,30 @@ namespace TheWayShop.Controllers
         {
             return View();
         }
-
+        public IActionResult Login()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                // This doesn't count login failures towards account lockout
+                // To enable password failures to trigger account lockout, set lockoutOnFailure: true
+                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, lockoutOnFailure: false);
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    ModelState.AddModelError("Login", "Dang nhap khong thanh cong");
+                    return View();
+                }
+            }
+            return View();
+        }
         public IActionResult Register()
         {
             return View();
@@ -94,6 +118,13 @@ namespace TheWayShop.Controllers
                     $"Ensure that '{nameof(AppUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
                     $"override the register page in /Areas/Identity/Pages/Account/Register.cshtml");
             }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("Index", "Home");
         }
 
     }

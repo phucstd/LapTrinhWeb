@@ -7,5 +7,11 @@ namespace TheWayShop.AppData
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
 
+        /*
+         *  Address
+         *  First Name
+         *  Last Name
+         */
+
     }
 }

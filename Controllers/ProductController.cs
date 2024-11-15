@@ -26,7 +26,6 @@ namespace TheWayShop.Controllers
         public IActionResult ProductList(int id)
         {
             List<Product> list = _db.Products.Where(_ => _.CategoryId == id).ToList();
-
             return View(list);
         }
     }
