@@ -65,7 +65,9 @@ namespace TheWayShop.Controllers
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
-
+                user.Address = model.Address;
+                user.FirstName  = model.FirstName;
+                user.LastName = model.LastName;
                 await _userStore.SetUserNameAsync(user, model.Email, CancellationToken.None);
                 //await _emailStore.SetEmailAsync(user, model.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, model.Password);
@@ -120,7 +122,6 @@ namespace TheWayShop.Controllers
             }
         }
 
-        [HttpPost]
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();

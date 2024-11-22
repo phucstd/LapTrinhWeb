@@ -3,25 +3,82 @@
 @inject SignInManager<AppUser> SignInManager
 @inject UserManager<AppUser> UserManager
 
-<ul class="navbar-nav">
-@if (SignInManager.IsSignedIn(User))
-{
-    <li class="nav-item">
-        <a id="manage" class="nav-link text-dark" asp-action="Index" asp-controller="User" title="Manage">Hello @UserManager.GetUserName(User)!</a>
-    </li>
-    <li class="nav-item">
-            <form id="logoutForm" class="form-inline" asp-action="Logout" asp-controller="User" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button id="logout" type="submit" class="nav-link btn btn-link text-dark border-0">Logout</button>
-        </form>
-    </li>
-}
-else
-{
-    <li class="nav-item">
-            <a class="nav-link text-dark" id="register" asp-action="Register" asp-controller="User">Register</a>
-    </li>
-    <li class="nav-item">
-            <a class="nav-link text-dark" id="login" asp-action="Login" asp-controller="User">Login</a>
-    </li>
-}
-</ul>
+<div class="main-top">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                <div class="text-slid-box">
+                    <div id="offer-box" class="carouselTicker">
+                        <ul class="offer-box">
+                            <li>
+                                <i class="fab fa-opencart"></i> Off 10%! Shop Now Man
+                            </li>
+                            <li>
+                                <i class="fab fa-opencart"></i> 50% - 80% off on Fashion
+                            </li>
+                            <li>
+                                <i class="fab fa-opencart"></i> 20% off Entire Purchase Promo code: offT20
+                            </li>
+                            <li>
+                                <i class="fab fa-opencart"></i> Off 50%! Shop Now
+                            </li>
+                            <li>
+                                <i class="fab fa-opencart"></i> Off 10%! Shop Now Man
+                            </li>
+                            <li>
+                                <i class="fab fa-opencart"></i> 50% - 80% off on Fashion
+                            </li>
+                            <li>
+                                <i class="fab fa-opencart"></i> 20% off Entire Purchase Promo code: offT20
+                            </li>
+                            <li>
+                                <i class="fab fa-opencart"></i> Off 50%! Shop Now
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                <div class="custom-select-box">
+                    <select id="basic" class="selectpicker show-tick form-control" data-placeholder="$ USD">
+                        <option>¥ JPY</option>
+                        <option>$ USD</option>
+                        <option>€ EUR</option>
+                    </select>
+                </div>
+                <div class="right-phone-box">
+                    <p>Call US :- <a href="#"> +11 900 800 100</a></p>
+                </div>
+                <div class="our-link">
+                    <ul>
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <li>
+                                <a id="manage" asp-action="Index" asp-controller="User" title="Manage">Hello @UserManager.GetUserName(User)!</a>
+                            </li>
+                            <li>
+                                <a id="logout" asp-action="Logout" asp-controller="User" title="Manage">Logout</a>
+                                @* <form id="logoutForm" class="form-inline" asp-action="Logout" asp-controller="User" asp-route-returnUrl="@Url.Action("Index", "Home")">
+                                    <!-- Button with the same styling as links -->
+                                     <button id="logout" type="submit" class="nav-link btn btn-link text-light border-0">LOGOUT</button>
+                                </form> *@
+                            </li>
+                        }
+                        else
+                        {
+                            <li>
+                                <a id="register" asp-action="Register" asp-controller="User">Register</a>
+                            </li>
+                            <li>
+                                <a id="login" asp-action="Login" asp-controller="User">Login</a>
+                            </li>
+                        }
+                        <li><a href="#">Our location</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
