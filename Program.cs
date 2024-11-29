@@ -9,6 +9,12 @@ builder.Services.AddDbContext<AppDBContext>(options => options.UseSqlServer(conn
 builder.Services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<AppDBContext>();
 //builder.Services.AddDefaultIdentity<AppDBContext>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<TheWayShopContext>();
 
+builder.Services.AddDistributedMemoryCache();  // Register memory cache service
+builder.Services.AddSession(cfg => {           // Configure session options
+    cfg.Cookie.Name = "TheWayShop";            // Set the session cookie name
+    cfg.IdleTimeout = new TimeSpan(0, 30, 0);  // Set session timeout (30 minutes)
+});
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
@@ -24,6 +30,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+app.UseSession();
 
 app.UseRouting();
 

@@ -1,0 +1,28 @@
+﻿@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json
+@inject IHttpContextAccessor HttpContextAccessor
+
+
+@{
+    var session = HttpContextAccessor.HttpContext.Session;
+    string jsoncart = session.GetString(TheWayShop.Controllers.ProductController.CARTKEY);
+    if (jsoncart != null)
+    {
+        var cart = JsonConvert.DeserializeObject<List<CartItem>>(jsoncart);
+        <li class="side-menu">
+            <a asp-route="cart">
+			<i class="fa fa-shopping-bag"></i>
+             <span class="badge">@cart.Count</span>
+             </a>
+        </li>
+    }
+    else
+    {
+        <li class="side-menu">
+            <a asp-route ="cart">
+                <i class="fa fa-shopping-bag"></i>
+                <span class="badge">0</span>
+                </a>
+        </li>
+    }
+}
