@@ -1,10 +1,10 @@
 ﻿@model List<TheWayShop.Models.CartItem>
 
-<h2>GIỎ HÀNG</h2>
-
-@if (Model.Count > 0)
-{
+@{
     float total = 0;
+}
+@* @if (Model.Count > 0)
+{
     int stt = 1;
 
     <table class="table">
@@ -74,4 +74,173 @@
 else
 {
     <p class="alert alert-danger">Giỏ hàng trống</p>
+} *@
+
+
+<div class="cart-box-main">
+    <div class="container">
+        <!-- Cart -->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="table-main table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Images</th>
+                                <th>Product Name</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Total</th>
+                                <th>Remove</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.Count > 0)
+                            {
+                                @foreach (var cartitem in Model)
+                                {
+                                    var thanhtien = cartitem.quantity * cartitem.product.Price;
+                                    total += thanhtien;
+                                    @*  <tr>
+                            <td>@cartitem.product.Name</td>
+                            <td>@(cartitem.product.Price.ToString("n0"))</td>
+                            <td><input asp-for="@cartitem.quantity" id="@($"quantity-{cartitem.product.Id}")" /></td>
+                            <td>@(thanhtien.ToString("n0"))</td>
+                            <td>
+                            <button class="btn btn-success updatecartitem"
+                            data-productid="@cartitem.product.Id">
+                            Cập nhật
+                            </button>
+                            <a asp-route="removecart" asp-route-productid="@cartitem.product.Id"
+                            class="btn btn-danger"><i class="fas fa-times"></i></a>
+                            </td>
+                            </tr> *@
+
+                                    <tr class="cart-item-row" data-productid="@cartitem.product.Id">
+                                        <td class="thumbnail-img">
+                                            <img class="img-fluid" src="@cartitem.product.ImagePath" alt="" />
+                                        </td>
+                                        <td class="name-pr">
+                                            <p>@cartitem.product.Name</p>
+                                        </td>
+                                        <td class="price-pr">
+                                            <p>$ @(cartitem.product.Price.ToString())</p>
+                                        </td>
+                                        <td>
+                                            <input asp-for="@cartitem.quantity" id="@($"quantity-{cartitem.product.Id}")" />
+                                        </td>
+                                        <td class="total-pr">
+                                            <p>$ @(thanhtien.ToString())</p>
+                                        </td>
+                                        <td class="remove-pr">
+                                            <a asp-route="removecart" asp-route-productid="@cartitem.product.Id"
+                                               class="btn btn-danger"><i class="fas fa-times"></i></a>
+                                        </td>
+                                    </tr>
+
+                                }
+                            }
+                            else
+                            {
+                                <p class="alert alert-danger">Giỏ hàng trống</p>
+                            }
+                                
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- Coupons -->
+        <div class="row my-5">
+            <div class="col-lg-6 col-sm-6">
+                <div class="coupon-box">
+                    <div class="input-group input-group-sm">
+                        <input class="form-control" placeholder="Enter your coupon code" aria-label="Coupon code" type="text">
+                        <div class="input-group-append">
+                            <button class="btn btn-theme" type="button">Apply Coupon</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-sm-6">
+                <div class="update-box">
+                    <button class="btn btn-success updatecartitem">Update Cart</button>
+                </div>
+            </div>
+        </div>
+        <!-- Checkout -->
+        <div class="row my-5">
+            <div class="col-lg-8 col-sm-12"></div>
+            <div class="col-lg-4 col-sm-12">
+                <div class="order-box">
+                    <h3>Order summary</h3>
+                    <div class="d-flex">
+                        <h4>Sub Total</h4>
+                        <div class="ml-auto font-weight-bold"> $ @total </div>
+                    </div>
+                    <div class="d-flex">
+                        <h4>Discount</h4>
+                        <div class="ml-auto font-weight-bold"> $ 0 </div>
+                    </div>
+                    <hr class="my-1">
+                    <div class="d-flex">
+                        <h4>Coupon Discount</h4>
+                        <div class="ml-auto font-weight-bold"> $ 0 </div>
+                    </div>
+                    <div class="d-flex">
+                        <h4>Tax</h4>
+                        <div class="ml-auto font-weight-bold"> $ 0 </div>
+                    </div>
+                    <div class="d-flex">
+                        <h4>Shipping Cost</h4>
+                        <div class="ml-auto font-weight-bold"> Free </div>
+                    </div>
+                    <hr>
+                    <div class="d-flex gr-total">
+                        <h5>Grand Total</h5>
+                        <div class="ml-auto h5"> $ @total </div>
+                    </div>
+                    <hr>
+                </div>
+            </div>
+            <div class="col-12 d-flex shopping-box"><a href="checkout.html" class="ml-auto btn hvr-hover">Checkout</a> </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $(".updatecartitem").click(function (event) {
+                event.preventDefault();
+
+                // Thu thập toàn bộ sản phẩm và số lượng trong giỏ hàng
+                var cartData = [];
+                $(".cart-item-row").each(function () {
+                    var productid = $(this).data("productid");
+                    var quantity = $("#quantity-" + productid).val();
+                    cartData.push({ productid: productid, quantity: quantity });
+                });
+
+                // Gửi danh sách sản phẩm tới server
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.RouteUrl("updatecart")",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(cartData), // Chuyển danh sách thành JSON
+                    success: function () {
+                        console.log("Cập nhật giỏ hàng thành công.");
+                        window.location.href = "@Url.RouteUrl("cart")"; // Refresh giỏ hàng
+                    },
+                    error: function () {
+                        alert("Có lỗi xảy ra khi cập nhật giỏ hàng.");
+                    }
+                });
+            });
+        });
+    </script>
+
 }

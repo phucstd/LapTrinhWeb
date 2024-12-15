@@ -79,20 +79,29 @@ namespace TheWayShop.Controllers
         /// Cập nhật
         [Route("/updatecart", Name = "updatecart")]
         [HttpPost]
-        public IActionResult UpdateCart([FromForm] int productid, [FromForm] int quantity)
+        public IActionResult UpdateCart([FromBody] List<CartUpdateModel> cartUpdates)
         {
-            // Cập nhật Cart thay đổi số lượng quantity ...
             var cart = GetCartItems();
-            var cartitem = cart.Find(p => p.product.Id == productid);
-            if (cartitem != null)
+
+            foreach (var update in cartUpdates)
             {
-                // Đã tồn tại, tăng thêm 1
-                cartitem.quantity = quantity;
+                var cartitem = cart.Find(p => p.product.Id == update.productid);
+                if (cartitem != null)
+                {
+                    cartitem.quantity = update.quantity;
+                }
             }
+
             SaveCartSession(cart);
-            // Trả về mã thành công (không có nội dung gì - chỉ để Ajax gọi)
             return Ok();
         }
+
+        public class CartUpdateModel
+        {
+            public int productid { get; set; }
+            public int quantity { get; set; }
+        }
+
 
 
         // Hiện thị giỏ hàng
