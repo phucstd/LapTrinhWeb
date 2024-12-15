@@ -4,6 +4,7 @@ using TheWayShop.Models;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Identity;
 
 namespace TheWayShop.Controllers
 {
@@ -111,7 +112,7 @@ namespace TheWayShop.Controllers
             return View(GetCartItems());
         }
 
-        [Route("/checkout")]
+        [Route("/checkout", Name = "checkout")]
         public IActionResult CheckOut()
         {
             // Xử lý khi đặt hàng
@@ -143,6 +144,42 @@ namespace TheWayShop.Controllers
             var session = HttpContext.Session;
             string jsoncart = JsonConvert.SerializeObject(ls);
             session.SetString(CARTKEY, jsoncart);
+        }
+
+        public IActionResult PlaceOrder()
+        {
+            var cartItems = GetCartItems();
+            if (cartItems.Count <= 0)
+            {
+                ViewBag.IsPurchaseSuccessful = false;
+                return View();
+            }
+
+            Order order = new Order()
+            {
+                CreatedAt = DateTime.Now,
+                Status = "Ordered",
+                UserId = User.Identity?.Name
+            };
+            _db.Orders.Add(order);
+            _db.SaveChanges();
+            List<OrderProduct> orderProducts = new List<OrderProduct>();
+            foreach (var product in cartItems)
+            {
+                orderProducts.Add(new OrderProduct()
+                {
+                    OrderId = order.Id,
+                    ProductId = product.product.Id,
+                    Quantity = product.quantity
+                });
+            }
+            // Add the item to the database
+            
+            _db.OrderProducts.AddRange(orderProducts);
+            _db.SaveChanges(); // Save changes to persist the new item.
+            ViewBag.IsPurchaseSuccessful = true;
+            ClearCart();
+            return View(); // Redirect back to the Index page.
         }
     }
 }

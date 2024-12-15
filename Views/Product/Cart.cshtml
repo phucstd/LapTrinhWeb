@@ -3,79 +3,6 @@
 @{
     float total = 0;
 }
-@* @if (Model.Count > 0)
-{
-    int stt = 1;
-
-    <table class="table">
-        <tr>
-            <th>#</th>
-            <th>Sản phẩm</th>
-            <th>Giá</th>
-            <th>Số lượng</th>
-            <th>Thành tiền</th>
-            <th></th>
-        </tr>
-        @foreach (var cartitem in Model)
-        {
-            var thanhtien = cartitem.quantity * cartitem.product.Price;
-
-            total += thanhtien;
-
-            <tr>
-                <td>@(stt++)</td>
-                <td>@cartitem.product.Name</td>
-                <td>@(cartitem.product.Price.ToString("n0"))</td>
-                <td><input asp-for="@cartitem.quantity" id="@($"quantity-{cartitem.product.Id}")" /></td>
-                <td>@(thanhtien.ToString("n0"))</td>
-                <td>
-                    <button class="btn btn-success updatecartitem"
-                            data-productid="@cartitem.product.Id">
-                        Cập nhật
-                    </button>
-                    <a asp-route="removecart" asp-route-productid="@cartitem.product.Id"
-                       class="btn btn-danger">Xóa</a>
-                </td>
-            </tr>
-        }
-        <tr>
-            <td colspan="4" class="text-right">Tổng tiền</td>
-            <td>@(total.ToString("n0"))</td>
-            <td></td>
-        </tr>
-    </table>
-
-    <a asp-controller="Product" asp-action="Checkout" class="btn btn-success">Gửi đơn hàng</a>
-
-    @section Scripts {
-    <script>
-        $(document).ready(function () {
-            $(".updatecartitem").click(function (event) {
-                event.preventDefault();
-                var productid = $(this).attr("data-productid");
-                var quantity = $("#quantity-" + productid).val();
-                $.ajax({
-                    type: "POST",
-                    url: "@Url.RouteUrl("updatecart")",
-                        data: {
-                            productid: productid,
-                            quantity: quantity
-                        },
-                        success: function (result) {
-                            window.location.href = "@Url.RouteUrl("cart")";
-                        }
-                    });
-                });
-            });
-        </script>
-    }
-
-}
-else
-{
-    <p class="alert alert-danger">Giỏ hàng trống</p>
-} *@
-
 
 <div class="cart-box-main">
     <div class="container">
@@ -101,21 +28,6 @@ else
                                 {
                                     var thanhtien = cartitem.quantity * cartitem.product.Price;
                                     total += thanhtien;
-                                    @*  <tr>
-                            <td>@cartitem.product.Name</td>
-                            <td>@(cartitem.product.Price.ToString("n0"))</td>
-                            <td><input asp-for="@cartitem.quantity" id="@($"quantity-{cartitem.product.Id}")" /></td>
-                            <td>@(thanhtien.ToString("n0"))</td>
-                            <td>
-                            <button class="btn btn-success updatecartitem"
-                            data-productid="@cartitem.product.Id">
-                            Cập nhật
-                            </button>
-                            <a asp-route="removecart" asp-route-productid="@cartitem.product.Id"
-                            class="btn btn-danger"><i class="fas fa-times"></i></a>
-                            </td>
-                            </tr> *@
-
                                     <tr class="cart-item-row" data-productid="@cartitem.product.Id">
                                         <td class="thumbnail-img">
                                             <img class="img-fluid" src="@cartitem.product.ImagePath" alt="" />
@@ -164,9 +76,10 @@ else
             </div>
             <div class="col-lg-6 col-sm-6">
                 <div class="update-box">
-                    <button class="btn btn-success updatecartitem">Update Cart</button>
+                    <input value="Update Cart" type="submit" class="btn btn-success updatecartitem">
                 </div>
             </div>
+
         </div>
         <!-- Checkout -->
         <div class="row my-5">
@@ -203,7 +116,7 @@ else
                     <hr>
                 </div>
             </div>
-            <div class="col-12 d-flex shopping-box"><a href="checkout.html" class="ml-auto btn hvr-hover">Checkout</a> </div>
+            <div class="col-12 d-flex shopping-box"> <a asp-route="checkout" class="ml-auto btn hvr-hover">Checkout</a> </div>
         </div>
 
     </div>

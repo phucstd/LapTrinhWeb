@@ -108,6 +108,64 @@ namespace TheWayShop.Controllers
             // If we got this far, something failed, redisplay form
             return View();
         }
+        [HttpPost]
+        public async Task<IActionResult> RegisterFromCheckout(CheckoutViewModel model, string returnUrl = null)
+        {
+            returnUrl ??= Url.Content("~/");
+            //ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            var user = CreateUser();
+            user.Address = model.Register.Address;
+            user.FirstName = model.Register.FirstName;
+            user.LastName = model.Register.LastName;
+            await _userStore.SetUserNameAsync(user, model.Register.Email, CancellationToken.None);
+            //await _emailStore.SetEmailAsync(user, model.Email, CancellationToken.None);
+            var result = await _userManager.CreateAsync(user, model.Register.Password);
+
+            if (result.Succeeded)
+            {
+                // _logger.LogInformation("User created a new account with password.");
+
+                var userId = await _userManager.GetUserIdAsync(user);
+                /*
+                var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                var callbackUrl = Url.Page(
+                    "/Account/ConfirmEmail",
+                    pageHandler: null,
+                    values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
+                    protocol: Request.Scheme);
+
+                await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
+                    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                */
+                if (_userManager.Options.SignIn.RequireConfirmedAccount)
+                {
+                    return RedirectToPage("RegisterConfirmation", new { email = model.Register.Email, returnUrl = returnUrl });
+                }
+                else
+                {
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    return RedirectToRoute("checkout");
+                }
+            }
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+
+            // If we got this far, something failed, redisplay form
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> LoginFromCheckout(CheckoutViewModel model)
+        {
+            var result = await _signInManager.PasswordSignInAsync(model.Login.Email, model.Login.Password, false, lockoutOnFailure: false);
+            if (!result.Succeeded)
+            {
+                ModelState.AddModelError("Login", "Dang nhap khong thanh cong");
+            }
+            return RedirectToRoute("checkout");
+        }
         private AppUser CreateUser()
         {
             try
