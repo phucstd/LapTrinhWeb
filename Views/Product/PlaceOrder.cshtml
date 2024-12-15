@@ -1,11 +1,8 @@
 ﻿@{
     ViewBag.Title = "Purchase Result";
 }
-
-<h2>@ViewBag.Message</h2>
-
 <!-- Display the message based on success or failure -->
-@if (ViewBag.IsPurchaseSuccessful == true)
+@if (ViewBag.IsPurchaseSuccessful)
 {
     <div class="alert alert-success">
         <strong>Success!</strong> Your purchase has been completed successfully.

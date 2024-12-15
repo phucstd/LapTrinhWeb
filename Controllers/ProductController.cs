@@ -170,7 +170,8 @@ namespace TheWayShop.Controllers
                 {
                     OrderId = order.Id,
                     ProductId = product.product.Id,
-                    Quantity = product.quantity
+                    Quantity = product.quantity,
+                    Price = product.product.Price
                 });
             }
             // Add the item to the database
