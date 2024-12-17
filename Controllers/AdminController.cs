@@ -23,16 +23,14 @@ namespace TheWayShop.Controllers
             return View(products);
         }
 
-        // GET: Admin/CreateProduct
         public IActionResult CreateProduct()
         {
             ViewBag.Categories = _context.Categories.ToList(); // Assuming you have a Categories table
             return View();
         }
 
-        // POST: Admin/CreateProduct
+       
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public IActionResult CreateProduct(Product product)
         {
             if (ModelState.IsValid)
@@ -45,7 +43,6 @@ namespace TheWayShop.Controllers
             return View(product);
         }
 
-        // GET: Admin/EditProduct/5
         public IActionResult EditProduct(int? id)
         {
             if (id == null) return NotFound();
@@ -57,9 +54,7 @@ namespace TheWayShop.Controllers
             return View(product);
         }
 
-        // POST: Admin/EditProduct/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public IActionResult EditProduct(int id, Product product)
         {
             if (id != product.Id) return NotFound();
@@ -74,7 +69,6 @@ namespace TheWayShop.Controllers
             return View(product);
         }
 
-        // GET: Admin/DeleteProduct/5
         public IActionResult DeleteProduct(int? id)
         {
             if (id == null) return NotFound();
@@ -87,22 +81,19 @@ namespace TheWayShop.Controllers
 
         }
 
-        // Category Management - List Categories
         public IActionResult Categories()
         {
             var categories = _context.Categories.ToList();
             return View(categories);
         }
 
-        // Create Category (GET)
         public IActionResult CreateCategory()
         {
             return View();
         }
 
-        // Create Category (POST)
+        
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public IActionResult CreateCategory(Category category)
         {
             if (ModelState.IsValid)
@@ -115,7 +106,6 @@ namespace TheWayShop.Controllers
             return View(category);
         }
 
-        // Edit Category (GET)
         public IActionResult EditCategory(int id)
         {
             var category = _context.Categories.Find(id);
@@ -126,9 +116,8 @@ namespace TheWayShop.Controllers
             return View(category);
         }
 
-        // Edit Category (POST)
+       
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public IActionResult EditCategory(Category category)
         {
             if (ModelState.IsValid)
@@ -140,7 +129,6 @@ namespace TheWayShop.Controllers
             return View(category);
         }
 
-        // Delete Category (GET)
         public IActionResult DeleteCategory(int id)
         {
             var category = _context.Categories.Find(id);
