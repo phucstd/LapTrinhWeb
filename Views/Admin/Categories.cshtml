@@ -1,0 +1,78 @@
+﻿@model IEnumerable<TheWayShop.Models.Category>
+
+
+@* <a asp-action="CreateCategory" class="btn btn-primary">Add New Category</a>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var category in Model)
+        {
+            <tr>
+                <td>@category.Id</td>
+                <td>@category.Name</td>
+                <td>@category.Description</td>
+                <td>
+                    <a asp-action="EditCategory" asp-route-id="@category.Id" class="btn btn-warning">Edit</a>
+                    <a asp-action="DeleteCategory" asp-route-id="@category.Id" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table> *@
+
+<div class="wishlist-box-main">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h2>Manage Categories</h2>
+                <div class="table-main table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Images</th>
+                                <th>Category Name</th>
+                                <th>Edit</th>
+                                <th>Remove</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var category in Model)
+                            {
+                                <tr>
+                                    <td class="thumbnail-img">
+                                        <img class="img-fluid" src="~/@category.ImagePath" alt="" />
+                                    </td>
+                                    <td class="name-pr">
+                                        @category.Name
+                                    </td>
+                                    <td class="add-pr">
+                                        <a class="btn hvr-hover" asp-action="EditCategory" asp-route-id="@category.Id">Edit</a>
+                                    </td>
+                                    <td class="remove-pr">
+                                        <a asp-action="DeleteCategory" asp-route-id="@category.Id">
+                                            <i class="fas fa-times"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot>
+                            <td class="add-pr"> 
+                                <a class="btn hvr-hover" asp-action="CreateCategory">Add New Category</a>
+                            </td>
+                        </tfoot>
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

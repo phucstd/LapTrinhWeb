@@ -75,10 +75,15 @@
                         }
                         @if (User.IsInRole("Admin"))
                         {
-                            <li><a asp-controller="Admin" asp-action="Index">Admin Panel</a></li>
+                            <li><a asp-controller="Admin" asp-action="Products">Product Management</a></li>
+                            <li><a asp-controller="Admin" asp-action="Categories">Categories Management</a></li>
                         }
-                        <li><a href="#">Our location</a></li>
-                        <li><a href="#">Contact Us</a></li>
+                        else
+                        {
+                            <li><a href="#">Our location</a></li>
+                            <li><a href="#">Contact Us</a></li>
+                        }
+
                     </ul>
                 </div>
             </div>

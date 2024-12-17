@@ -16,7 +16,7 @@ namespace TheWayShop.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+        public IActionResult Products()
         {
             ViewBag.Categories = _context.Categories.ToDictionary(c => c.Id, c => c.Name);
             var products = _context.Products.ToList();
@@ -39,7 +39,7 @@ namespace TheWayShop.Controllers
             {
                 _context.Products.Add(product);
                 _context.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction(nameof(Products));
             }
             ViewBag.Categories = _context.Categories.ToList();
             return View(product);
@@ -68,7 +68,7 @@ namespace TheWayShop.Controllers
             {
                 _context.Update(product);
                 _context.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction(nameof(Products));
             }
             ViewBag.Categories = _context.Categories.ToList();
             return View(product);
@@ -83,8 +83,79 @@ namespace TheWayShop.Controllers
             if (product == null) return NotFound();
             _context.Products.Remove(product);
             _context.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction(nameof(Products));
 
+        }
+
+        // Category Management - List Categories
+        public IActionResult Categories()
+        {
+            var categories = _context.Categories.ToList();
+            return View(categories);
+        }
+
+        // Create Category (GET)
+        public IActionResult CreateCategory()
+        {
+            return View();
+        }
+
+        // Create Category (POST)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult CreateCategory(Category category)
+        {
+            if (ModelState.IsValid)
+            {
+                category.ImagePath ??= "content/images/t-shirts-img.jpg";
+                _context.Categories.Add(category);
+                _context.SaveChanges();
+                return RedirectToAction(nameof(Categories));
+            }
+            return View(category);
+        }
+
+        // Edit Category (GET)
+        public IActionResult EditCategory(int id)
+        {
+            var category = _context.Categories.Find(id);
+            if (category == null)
+            {
+                return NotFound();
+            }
+            return View(category);
+        }
+
+        // Edit Category (POST)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult EditCategory(Category category)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Categories.Update(category);
+                _context.SaveChanges();
+                return RedirectToAction(nameof(Categories));
+            }
+            return View(category);
+        }
+
+        // Delete Category (GET)
+        public IActionResult DeleteCategory(int id)
+        {
+            var category = _context.Categories.Find(id);
+            if (category != null)
+            {
+                var products = _context.Products.Where(_ => _.CategoryId.Equals(id));
+                foreach (var item in products)
+                {
+                    _context.Products.Remove(item);
+                }
+                _context.SaveChanges();
+                _context.Categories.Remove(category);
+                _context.SaveChanges();
+            }
+            return RedirectToAction(nameof(Categories));
         }
     }
 
