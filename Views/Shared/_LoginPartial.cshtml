@@ -73,6 +73,10 @@
                                 <a id="login" asp-action="Login" asp-controller="User">Login</a>
                             </li>
                         }
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li><a asp-controller="Admin" asp-action="Index">Admin Panel</a></li>
+                        }
                         <li><a href="#">Our location</a></li>
                         <li><a href="#">Contact Us</a></li>
                     </ul>

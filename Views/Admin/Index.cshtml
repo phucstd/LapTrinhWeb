@@ -1,0 +1,94 @@
+﻿@model IEnumerable<Product>
+@{
+    ViewData["Title"] = "Manage Products";
+}
+
+
+
+
+
+@* <table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Category</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var product in Model)
+        {
+            <tr>
+                <td>@product.Name</td>
+                <td>@product.Description</td>
+                <td>@product.Price</td>
+                <td>@product.CategoryId</td>
+                <td>
+                    <a asp-action="EditProduct" asp-route-id="@product.Id" class="btn btn-warning">Edit</a>
+                    <a asp-action="DeleteProduct" asp-route-id="@product.Id" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table> *@
+
+<div class="wishlist-box-main">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h2>Manage Products</h2>
+                <div class="table-main table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Images</th>
+                                <th>Product Name</th>
+                                <th>Unit Price </th>
+                                <th>Category</th>
+                                <th>Add Item</th>
+                                <th>Remove</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var product in Model)
+                            {
+                                <tr>
+                                    <td class="thumbnail-img">
+                                        <a href="/Product/Detail/@product.Id">
+                                            <img class="img-fluid" src="@product.ImagePath" alt="" />
+                                        </a>
+                                    </td>
+                                    <td class="name-pr">
+                                        <a href="/Product/Detail/@product.Id">
+                                            @product.Name
+                                        </a>
+                                    </td>
+                                    <td class="price-pr">
+                                        <p>$ @product.Price</p>
+                                    </td>
+                                    <td class="quantity-box">@ViewBag.Categories[product.CategoryId.Value]</td>
+                                    <td class="add-pr">
+                                        <a class="btn hvr-hover" asp-action="EditProduct" asp-route-id="@product.Id">Edit</a>
+                                    </td>
+                                    <td class="remove-pr">
+                                        <a asp-action="DeleteProduct" asp-route-id="@product.Id">
+                                            <i class="fas fa-times"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot>
+                            <td class="add-pr">
+                                <a class="btn hvr-hover" asp-action="CreateProduct">Add New Product</a>
+                            </td>
+                        </tfoot>
+                       
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
